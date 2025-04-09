@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RetroScale - Video Upscaler</title>
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="data:image/x-icon;base64,AAABAAEAEBAAAAEAIABoBAAAFgAAACgAAAAQAAAAIAAAAAEAIAAAAAAAAAQAABILAAASCwAAAAAAAAAAAAD///8A////AP///wD///8A////AP///wD///8A////AP///wD///8A////AP///wD///8A////AP///wD///8A////AP///wD///8A////AP///wD///8A////AP///wD///8A////AP///wD///8A////AP///wD///8A////AP///wD///8AAAAgQAAAAP8AAAD/AAAA/wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAA/wAAAEAAAABA////AAAAAEAAAADfAAAA/wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAA/wAAAN8AAABA////AP///wAAAABAAAAAzwAAAP8AAAD/AAAA/wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAA/wAAAM8AAABA////AP///wD///8AAAAAQAAAAIAAAADvAAAA/wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAA7wAAAIAAAABA////AP///wD///8A////AAAAAEAAAAAgAAAAnwAAAN8AAAD/AAAA/wAAAP8AAAD/AAAA3wAAAJ8AAAAgAAAAQP///wD///8A////AP///wD///8AAAAAIAAAAGAAAADfAAAA/wAAAP8AAAD/AAAA3wAAAGAAAAAgAAAA/////wD///8A////AP///wD///8A////AAAAAEAAAACfAAAA3wAAAP8AAAD/AAAA3wAAAJ8AAABA////AP///wD///8A////AP///wD///8A////AAAAAEAAAABwAAAAvwAAAP8AAAD/AAAAvwAAAHAAAABA////AP///wD///8A////AP///wD///8A////AAAAAEAAAABAAAAAcAAAAN8AAADfAAAAcAAAAEAAAABA////AP///wD///8A////AP///wD///8A////AAAAAEAAAAAgAAAAQAAAAJ8AAACfAAAAQAAAACAAAABA////AP///wD///8A////AP///wD///8A////AP///wAAAABAAAAAIAAAAEAAAABAAAAAIAAAAED///8A////AP///wD///8A////AP///wD///8A////AP///wD///8AAAAAQAAAAEAAAABAAAAAQP///wD///8A////AP///wD///8A////AP///wD///8A////AP///wD///8A////AP///wD///8A////AP///wD///8A////AP///wD///8A////AP///wD///8A////AP///wD///8A////AP///wD///8A////AP///wD///8A////AP///wD///8A////AP///wA=">
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'retro': ['"Press Start 2P"', 'cursive'],
+                        'retro-secondary': ['VT323', 'monospace']
+                    },
+                    colors: {
+                        'neon-blue': '#00f3ff',
+                        'neon-purple': '#b537f2',
+                        'retro-black': '#0a0a0a',
+                        'retro-dark': '#1a1a1a'
+                    },
+                    animation: {
+                        'neon-pulse': 'neon-pulse 2s infinite'
+                    },
+                    keyframes: {
+                        'neon-pulse': {
+                            '0%, 100%': { 
+                                textShadow: '0 0 7px #fff, 0 0 10px #fff, 0 0 21px #fff, 0 0 42px #00f3ff, 0 0 82px #00f3ff, 0 0 92px #00f3ff, 0 0 102px #00f3ff, 0 0 151px #00f3ff'
+                            },
+                            '50%': { 
+                                textShadow: '0 0 4px #fff, 0 0 7px #fff, 0 0 18px #fff, 0 0 38px #00f3ff, 0 0 73px #00f3ff, 0 0 80px #00f3ff, 0 0 94px #00f3ff, 0 0 140px #00f3ff'
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .neon-border {
+            box-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 20px #00f3ff, 0 0 30px #00f3ff, 0 0 40px #00f3ff;
+        }
+        .neon-text {
+            text-shadow: 0 0 7px #fff, 0 0 10px #fff, 0 0 21px #fff, 0 0 42px #00f3ff;
+        }
+        .grid-bg {
+            background-size: 50px 50px;
+            background-image: linear-gradient(to right, #1a1a1a 1px, transparent 1px),
+                            linear-gradient(to bottom, #1a1a1a 1px, transparent 1px);
+            background-color: #0a0a0a;
+        }
+    </style>
+</head>
+<body class="bg-retro-black text-white min-h-screen grid-bg">
+    <!-- Header -->
+    <header class="py-6 px-4 border-b border-neon-blue">
+        <div class="container mx-auto flex justify-between items-center">
+            <h1 class="font-retro text-2xl md:text-3xl text-neon-blue animate-neon-pulse">
+                RetroScale
+            </h1>
+            <nav>
+                <a href="#" class="font-retro-secondary text-lg hover:text-neon-purple transition-colors">
+                    <i class="fas fa-info-circle mr-2"></i>About
+                </a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="py-16 px-4">
+        <div class="container mx-auto text-center">
+            <h2 class="font-retro text-4xl md:text-5xl mb-6 text-neon-purple neon-text">
+                Video Upscaler
+            </h2>
+            <p class="font-retro-secondary text-xl md:text-2xl mb-8 text-gray-300">
+                Transform your videos into high-resolution masterpieces
+            </p>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-4 py-8">
+        <div class="max-w-4xl mx-auto">
+            <!-- Upload Section -->
+            <div class="mb-12">
+                <div class="border-2 border-neon-blue rounded-lg p-8 text-center hover:neon-border transition-all duration-300 bg-retro-dark">
+                    <div class="mb-6">
+                        <i class="fas fa-cloud-upload-alt text-6xl text-neon-blue mb-4"></i>
+                        <h3 class="font-retro text-xl mb-4">Upload Your Video</h3>
+                        <p class="font-retro-secondary text-gray-400 mb-4">Drag and drop your video file here or click to browse</p>
+                        <input type="file" id="videoInput" accept="video/*" class="hidden">
+                        <button onclick="document.getElementById('videoInput').click()" 
+                                class="bg-neon-purple hover:bg-purple-600 text-white font-retro py-2 px-6 rounded-lg transition-all duration-300">
+                            Select Video
+                        </button>
+                    </div>
+                    <div id="uploadStatus" class="hidden">
+                        <div class="flex items-center justify-center space-x-4">
+                            <i class="fas fa-check-circle text-green-500 text-xl"></i>
+                            <span class="font-retro-secondary text-green-500">Video uploaded successfully!</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Video Preview -->
+            <div id="previewSection" class="hidden mb-12">
+                <h3 class="font-retro text-xl mb-4 text-neon-blue">Preview</h3>
+                <div class="relative rounded-lg overflow-hidden neon-border">
+                    <video id="videoPreview" controls class="w-full">
+                        Your browser does not support the video tag.
+                    </video>
+                </div>
+            </div>
+
+            <!-- Convert Button -->
+            <div class="text-center mb-12">
+                <button id="convertBtn" disabled
+                        class="bg-neon-blue hover:bg-blue-500 text-white font-retro py-3 px-8 rounded-lg transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed">
+                    <i class="fas fa-magic mr-2"></i>
+                    Convert Video
+                </button>
+            </div>
+
+            <!-- Progress Bar -->
+            <div id="progressSection" class="hidden mb-12">
+                <div class="bg-retro-dark rounded-lg p-4 border border-neon-blue">
+                    <div class="mb-2 flex justify-between items-center">
+                        <span class="font-retro-secondary text-neon-blue">Processing...</span>
+                        <span id="progressPercentage" class="font-retro-secondary text-neon-purple">0%</span>
+                    </div>
+                    <div class="h-4 bg-gray-700 rounded-full overflow-hidden">
+                        <div id="progressBar" class="h-full w-0 bg-neon-purple transition-all duration-300"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- History Section -->
+        <div class="mt-16">
+            <h3 class="font-retro text-2xl mb-8 text-center text-neon-blue">Conversion History</h3>
+            <div id="historyGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- History items will be dynamically added here -->
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="mt-16 py-8 border-t border-neon-blue">
+        <div class="container mx-auto px-4 text-center">
+            <p class="font-retro-secondary text-gray-400">
+                © 2024 RetroScale. All rights reserved.
+            </p>
+        </div>
+    </footer>
+
+    <script src="js/script.js"></script>
+</body>
+</html>
+</create_file>
+
+<create_file>
+<path>js/script.js</path>
+<content>
+document.addEventListener('DOMContentLoaded', function() {
+    const videoInput = document.getElementById('videoInput');
+    const uploadStatus = document.getElementById('uploadStatus');
+    const previewSection = document.getElementById('previewSection');
+    const videoPreview = document.getElementById('videoPreview');
+    const convertBtn = document.getElementById('convertBtn');
+    const progressSection = document.getElementById('progressSection');
+    const progressBar = document.getElementById('progressBar');
+    const progressPercentage = document.getElementById('progressPercentage');
+    const historyGrid = document.getElementById('historyGrid');
+
+    // Handle file selection
+    videoInput.addEventListener('change', function(e) {
+        const file = e.target.files[0];
+        if (file) {
+            // Validate file type
+            if (!file.type.startsWith('video/')) {
+                alert('Please select a valid video file.');
+                return;
+            }
+
+            // Show upload status
+            uploadStatus.classList.remove('hidden');
+            
+            // Create video preview
+            const videoUrl = URL.createObjectURL(file);
+            videoPreview.src = videoUrl;
+            previewSection.classList.remove('hidden');
+            
+            // Enable convert button
+            convertBtn.disabled = false;
+        }
+    });
+
+    // Handle conversion
+    convertBtn.addEventListener('click', function() {
+        // Show progress section
+        progressSection.classList.remove('hidden');
+        convertBtn.disabled = true;
+
+        // Simulate conversion process
+        let progress = 0;
+        const interval = setInterval(() => {
+            progress += 1;
+            progressBar.style.width = `${progress}%`;
+            progressPercentage.textContent = `${progress}%`;
+
+            if (progress >= 100) {
+                clearInterval(interval);
+                addToHistory();
+                // Reset UI
+                setTimeout(() => {
+                    progressSection.classList.add('hidden');
+                    convertBtn.disabled = false;
+                }, 1000);
+            }
+        }, 50);
+    });
+
+    // Add to conversion history
+    function addToHistory() {
+        const file = videoInput.files[0];
+        const timestamp = new Date().toLocaleString();
+        
+        const historyItem = document.createElement('div');
+        historyItem.className = 'bg-retro-dark rounded-lg p-4 border border-neon-blue hover:neon-border transition-all duration-300';
+        historyItem.innerHTML = `
+            <div class="mb-4 aspect-video bg-black rounded overflow-hidden">
+                <video src="${videoPreview.src}" poster class="w-full h-full object-cover"></video>
+            </div>
+            <div class="font-retro-secondary">
+                <p class="text-neon-purple truncate">${file.name}</p>
+                <p class="text-gray-400 text-sm">${timestamp}</p>
+            </div>
+        `;
+        
+        // Add to grid
+        historyGrid.insertBefore(historyItem, historyGrid.firstChild);
+    }
+
+    // Drag and drop functionality
+    const dropZone = document.querySelector('.border-2');
+    
+    ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+        dropZone.addEventListener(eventName, preventDefaults, false);
+    });
+
+    function preventDefaults(e) {
+        e.preventDefault();
+        e.stopPropagation();
+    }
+
+    ['dragenter', 'dragover'].forEach(eventName => {
+        dropZone.addEventListener(eventName, highlight, false);
+    });
+
+    ['dragleave', 'drop'].forEach(eventName => {
+        dropZone.addEventListener(eventName, unhighlight, false);
+    });
+
+    function highlight(e) {
+        dropZone.classList.add('border-neon-purple');
+    }
+
+    function unhighlight(e) {
+        dropZone.classList.remove('border-neon-purple');
+    }
+
+    dropZone.addEventListener('drop', handleDrop, false);
+
+    function handleDrop(e) {
+        const dt = e.dataTransfer;
+        const file = dt.files[0];
+        
+        if (file && file.type.startsWith('video/')) {
+            videoInput.files = dt.files;
+            videoInput.dispatchEvent(new Event('change'));
+        } else {
+            alert('Please drop a valid video file.');
+        }
+    }
+});
